@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  rpc SendMessage (Message) returns (Empty) {}
+}
+
+message Message {
+  string content = 1;
+}
+
+message Empty {}
