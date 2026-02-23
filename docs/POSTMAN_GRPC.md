@@ -9,10 +9,27 @@
   { "email": "user1@example.com", "password": "password123" }
   ```
 
-**Response:** `access_token` (JWT) and `user` (id, email, name).  
-Refresh tokens are only returned by the **HTTP** API (`POST /auth/login`), not by gRPC.
+**Response:**
+```json
+{
+  "access_token": "<jwt>",
+  "refresh_token": "<jwt>",
+  "user": {
+    "id": "<uuid>",
+    "email": "user@example.com",
+    "name": "User Name"
+  }
+}
+```
 
-## Proto
+## Proto (required)
 
-Import **`src/auth.proto`** in Postman (Service definition → Import .proto file).  
-`AuthResponse` has two fields: `access_token` (1), `user` (2).
+Import **`src/auth.proto`** in Postman: **Service definition** → **Import .proto file** → select `src/auth.proto`.
+
+`AuthResponse` must have **all three fields** (or you get "invalid wire type 7"):
+
+- `access_token` = 1  
+- `refresh_token` = 2  
+- `user` = 3  
+
+Re-import the proto after any server changes so Postman’s definition matches the server.

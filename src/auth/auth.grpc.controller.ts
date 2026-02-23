@@ -42,13 +42,14 @@ export class AuthGrpcController {
     }
   }
 
-  /** gRPC returns only access_token + user (no refresh_token) to avoid client parsing errors. */
   private toGrpcAuthResponse(result: {
     access_token: string;
+    refresh_token: string;
     user: { id: string; email: string; name: string | null };
   }): AuthResponse {
     return {
       access_token: result.access_token,
+      refresh_token: result.refresh_token,
       user: {
         id: result.user.id,
         email: result.user.email,

@@ -21,7 +21,8 @@ message LoginRequest {
 
 message AuthResponse {
   string access_token = 1;
-  UserInfo user = 2;
+  string refresh_token = 2;
+  UserInfo user = 3;
 }
 
 message UserInfo {
