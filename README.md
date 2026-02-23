@@ -31,6 +31,61 @@
 $ npm install
 ```
 
+## Run with Docker
+
+Requires [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+**Run the app and PostgreSQL:**
+
+```bash
+$ docker compose up --build
+```
+
+- **HTTP API:** http://localhost:3000  
+- **gRPC:** localhost:5001  
+- **PostgreSQL:** localhost:5432 (user: `postgres`, password: `postgres`, database: `grpc_chat`)
+
+**Run in the background:**
+
+```bash
+$ docker compose up -d --build
+```
+
+**Run only PostgreSQL** (e.g. for local development with `npm run start:dev`):
+
+```bash
+$ docker compose up postgres -d
+```
+
+Then copy `.env.example` to `.env` and start the app locally. The app will connect to the database in Docker.
+
+**Stop containers:**
+
+```bash
+$ docker compose down
+```
+
+## Database: clear and seed
+
+Ensure PostgreSQL is running (e.g. `docker compose up postgres -d`) and `.env` is set (see `.env.example`). Then:
+
+| Command | Description |
+|--------|--------------|
+| `npm run db:clear` | Remove all users from the database. |
+| `npm run db:seed` | Seed **20 users** (`user1@example.com` … `user20@example.com`, password: `password123`). |
+| `npm run db:reset` | Clear the database, then seed 20 users. |
+
+```bash
+# Clear all users
+$ npm run db:clear
+
+# Seed 20 users (user1@example.com … user20@example.com, password: password123)
+$ npm run db:seed
+
+# Clear + seed in one go
+$ npm run db:reset
+```
+
 ## Compile and run the project
 
 ```bash
