@@ -50,8 +50,12 @@ export class UserService {
     return users.map((u) => this.toPublic(u));
   }
 
-  private toPublic(user: User): Omit<User, 'passwordHash'> {
+  toPublicUser(user: User): Omit<User, 'passwordHash'> {
     const { id, email, name, createdAt, updatedAt } = user;
     return { id, email, name, createdAt, updatedAt };
+  }
+
+  private toPublic(user: User): Omit<User, 'passwordHash'> {
+    return this.toPublicUser(user);
   }
 }

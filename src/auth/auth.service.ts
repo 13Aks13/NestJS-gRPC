@@ -61,4 +61,19 @@ export class AuthService {
   ): Promise<{ id: string; email: string; name: string | null } | null> {
     return this.userService.findById(payload.sub);
   }
+
+  async validateToken(accessToken: string): Promise<{
+    id: string;
+    email: string;
+    name: string | null;
+  }> {
+    try {
+      const payload = this.jwtService.verify<JwtPayload>(accessToken);
+      const user = await this.userService.findById(payload.sub);
+      if (!user) throw new Error('User not found');
+      return { id: user.id, email: user.email, name: user.name };
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+  }
 }

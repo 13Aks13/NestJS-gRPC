@@ -9,8 +9,12 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: 'chat',
-      protoPath: join(__dirname, './chat.proto'),
+      package: ['chat', 'user', 'auth'],
+      protoPath: [
+        join(__dirname, './chat.proto'),
+        join(__dirname, './user.proto'),
+        join(__dirname, './auth.proto'),
+      ],
       url: '0.0.0.0:5010',
     },
   });
