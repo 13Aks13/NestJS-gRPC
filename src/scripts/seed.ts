@@ -9,6 +9,7 @@ const DEFAULT_PASSWORD = 'password123';
 async function seed() {
   await appDataSource.initialize();
   try {
+    await appDataSource.synchronize();
     const repo = appDataSource.getRepository(User);
     const passwordHash = await bcrypt.hash(DEFAULT_PASSWORD, 10);
 

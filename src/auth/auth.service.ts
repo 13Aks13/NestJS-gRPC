@@ -11,6 +11,7 @@ export interface JwtPayload {
 
 export interface AuthResult {
   access_token: string;
+  refresh_token: string;
   user: { id: string; email: string; name: string | null };
 }
 
@@ -27,14 +28,7 @@ export class AuthService {
       password: dto.password,
       name: dto.name,
     });
-    const token = this.jwtService.sign({
-      sub: user.id,
-      email: user.email,
-    } as JwtPayload);
-    return {
-      access_token: token,
-      user: { id: user.id, email: user.email, name: user.name },
-    };
+    return this.buildTokens(user.id, user.email, user.name);
   }
 
   async login(email: string, password: string): Promise<AuthResult> {
@@ -46,13 +40,21 @@ export class AuthService {
     if (!valid) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    const token = this.jwtService.sign({
-      sub: user.id,
-      email: user.email,
-    } as JwtPayload);
+    return this.buildTokens(user.id, user.email, user.name);
+  }
+
+  private buildTokens(
+    userId: string,
+    email: string,
+    name: string | null,
+  ): AuthResult {
+    const payload: JwtPayload = { sub: userId, email };
+    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refresh_token = this.jwtService.sign(payload, { expiresIn: '7d' });
     return {
-      access_token: token,
-      user: { id: user.id, email: user.email, name: user.name },
+      access_token,
+      refresh_token,
+      user: { id: userId, email, name },
     };
   }
 

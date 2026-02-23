@@ -42,8 +42,10 @@ $ docker compose up --build
 ```
 
 - **HTTP API:** http://localhost:3000  
-- **gRPC:** localhost:5001  
-- **PostgreSQL:** localhost:5432 (user: `postgres`, password: `postgres`, database: `grpc_chat`)
+- **Swagger:** http://localhost:3000/api  
+- **gRPC:** localhost:5010 (see [docs/POSTMAN_GRPC.md](docs/POSTMAN_GRPC.md) for Postman and "invalid wire type 7" fix)  
+- **PostgreSQL:** localhost:5432 (user: `postgres`, password: `postgres`, database: `grpc_chat`)  
+- **pgAdmin:** http://localhost:5050 (login: `admin@example.com` / `admin`). To add the DB: **Servers → Register → Server** → Host: `postgres`, Port: `5432`, Username: `postgres`, Password: `postgres`.
 
 **Run in the background:**
 

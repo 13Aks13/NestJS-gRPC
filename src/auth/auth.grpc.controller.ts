@@ -22,14 +22,7 @@ export class AuthGrpcController {
         password: data.password,
         name: data.name,
       });
-      return {
-        access_token: result.access_token,
-        user: {
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.name ?? '',
-        },
-      };
+      return this.toGrpcAuthResponse(result);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Register failed';
       throw new RpcException({ code: status.ALREADY_EXISTS, message });
@@ -40,20 +33,28 @@ export class AuthGrpcController {
   async login(data: LoginRequest): Promise<AuthResponse> {
     try {
       const result = await this.authService.login(data.email, data.password);
-      return {
-        access_token: result.access_token,
-        user: {
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.name ?? '',
-        },
-      };
+      return this.toGrpcAuthResponse(result);
     } catch {
       throw new RpcException({
         code: status.UNAUTHENTICATED,
         message: 'Invalid email or password',
       });
     }
+  }
+
+  /** gRPC returns only access_token + user (no refresh_token) to avoid client parsing errors. */
+  private toGrpcAuthResponse(result: {
+    access_token: string;
+    user: { id: string; email: string; name: string | null };
+  }): AuthResponse {
+    return {
+      access_token: result.access_token,
+      user: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name ?? '',
+      },
+    };
   }
 
   @GrpcMethod('AuthService', 'Validate')
